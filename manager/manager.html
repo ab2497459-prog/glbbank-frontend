@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GLBBANK - Manager Dashboard</title>
+    <link rel="stylesheet" href="../landing-page/style.css">
+    <link rel="stylesheet" href="manager.css">
+</head>
+<body>
+
+    <!-- Upper Control Ribbon Banner -->
+    <div class="header-bar">
+        <h2>GL BAJAJ GROUP OF INSTITUTIONS - Bank Manager Panel</h2>
+        <div class="funds-display">Total Bank Vault Funds: ₹<span id="totalFundsDisplay">0.00</span></div>
+    </div>
+
+    <div class="dashboard-container">
+        <!-- Navigation Sidebar Tree Structure -->
+        <div class="sidebar">
+            <div class="tree-title">Manager Tools</div>
+            <button class="tree-node active" id="btn-tab-create" onclick="switchTab('create-emp')">👤 Add New Employee</button>
+            <button class="tree-node" id="btn-tab-registry" onclick="switchTab('registry-emp')">📋 Employee Registry</button>
+            <button class="tree-node" id="btn-tab-managers" onclick="switchTab('manage-managers')">👔 Manage Managers</button>
+            <button class="tree-node" id="btn-tab-accounts" onclick="switchTab('registry-acc')">🏦 Accounts</button>
+            <button class="tree-node logout-btn" onclick="triggerLogout()">🚪 Secure Logout</button>
+        </div>
+
+        <!-- Working Subsystem Panels -->
+        <div class="main-content">
+            
+            <!-- Tab Component 1: Onboard System Worker -->
+            <div id="create-emp" class="content-section active">
+                <h3>Onboard Bank Employee</h3>
+                <form id="employeeForm">
+                    <div class="form-field">
+                        <label for="empName">Full Name</label>
+                        <input type="text" id="empName" placeholder="Enter full name" required>
+                    </div>
+                    <div class="form-field">
+                        <label for="empUid">Employee ID</label>
+                        <input type="text" id="empUid" placeholder="e.g., EMP101" required>
+                    </div>
+                    <div class="form-field">
+                        <label for="empMobile">Mobile No.</label>
+                        <input type="tel" id="empMobile" placeholder="10-digit mobile number" pattern="[0-9]{10}" required>
+                    </div>
+                    <div class="form-field">
+                        <label for="empEmail">Corporate Email ID</label>
+                        <input type="email" id="empEmail" placeholder="username@glbbank.com" required>
+                    </div>
+                    <div class="form-field">
+                        <label for="empPassword">Assign Access Password</label>
+                        <input type="password" id="empPassword" placeholder="Minimum 8 characters" required>
+                    </div>
+                    <div class="form-field">
+                        <label for="empAadhar">Aadhaar Card No.</label>
+                        <input type="text" id="empAadhar" placeholder="12-digit number" pattern="\d{12}" title="Must be exactly 12 digits" required>
+                    </div>
+                    <button type="submit" class="btn-submit">Register Employee Account</button>
+                </form>
+            </div>
+
+            <!-- Tab Component 4: Manage Managers -->
+            <div id="manage-managers" class="content-section">
+                <h3>Manager Registry & Onboarding</h3>
+
+                <div class="form-section">
+                  <h4>Register Manager</h4>
+                  <form id="managerForm">
+                    <div class="form-field"><label for="mgrName">Full Name</label><input id="mgrName" required></div>
+                    <div class="form-field"><label for="mgrEmail">Email</label><input id="mgrEmail" type="email" required></div>
+                    <div class="form-field"><label for="mgrMobile">Mobile</label><input id="mgrMobile" pattern="[0-9]{10}"></div>
+                    <div class="form-field"><label for="mgrPassword">Password</label><input id="mgrPassword" type="password" required></div>
+                    <button type="submit" class="btn-submit">Register Manager</button>
+                  </form>
+                </div>
+
+                <div class="search-container">
+                    <input type="text" id="mgrSearchInput" placeholder="Search managers by name or email...">
+                    <button class="btn-search" onclick="renderManagers()">Refresh</button>
+                </div>
+                <div class="table-scroll-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Mobile</th>
+                                <th>Role</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="managersTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Tab Component 3: Accounts Registry -->
+            <div id="registry-acc" class="content-section">
+                <h3>Accounts Registry</h3>
+                <div class="search-container">
+                    <input type="text" id="accSearchInput" placeholder="Search by account number, owner id or type...">
+                    <button class="btn-search" onclick="renderAccounts()">Search</button>
+                </div>
+                <div class="table-scroll-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Account No.</th>
+                                <th>Type</th>
+                                <th>Balance</th>
+                                <th>Status</th>
+                                <th>Owner ID</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="accountsTableBody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Tab Component 2: View and Manage Database Registry -->
+            <div id="registry-emp" class="content-section">
+                <h3>Active Employee Registry</h3>
+                <div class="search-container">
+                    <select id="roleSelect">
+                        <option value="employee">Employees</option>
+                        <option value="student">Students</option>
+                        <option value="faculty">Faculty</option>
+                        <option value="merchant">Merchants</option>
+                    </select>
+                    <input type="text" id="empSearchInput" placeholder="Search by name, ID, or email...">
+                    <button class="btn-search" onclick="renderEmployees()">Search</button>
+                </div>
+                <div class="table-scroll-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name (Click to view Card)</th>
+                                <th>Employee ID</th>
+                                <th>Mobile No.</th>
+                                <th>Email Address</th>
+                                <th>Access Password</th>
+                                <th>Aadhaar Card No.</th>
+                                <th>Management Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="employeeTableBody">
+                            <!-- Loaded Dynamically via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- EMPLOYEE DETAILS CARD MODAL -->
+    <div class="emp-modal-overlay" id="empCardModal">
+        <div class="emp-card-box">
+            <button class="emp-modal-close" onclick="closeEmpCard()">&times;</button>
+            <div class="emp-card-header">
+                <div class="emp-card-avatar">👤</div>
+                <h3 id="cardEmpName">Employee Name</h3>
+                <p id="cardEmpId">ID: EMP000</p>
+            </div>
+            <div class="emp-card-body">
+                <div class="card-meta-row"><strong>Mobile No:</strong> <span id="cardEmpMobile">-</span></div>
+                <div class="card-meta-row"><strong>Email ID:</strong> <span id="cardEmpEmail">-</span></div>
+                <div class="card-meta-row"><strong>Password:</strong> <span id="cardEmpPass">-</span></div>
+                <div class="card-meta-row"><strong>Aadhaar Status:</strong> <span id="cardEmpAadhar">Verified</span></div>
+            </div>
+            <div class="emp-card-footer">GLBBANK Corporate Security</div>
+        </div>
+    </div>
+
+    <script src="../shared/api.js"></script>
+    <script src="manager.js"></script>
+</body>
+</html>

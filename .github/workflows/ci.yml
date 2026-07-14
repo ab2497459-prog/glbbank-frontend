@@ -1,0 +1,65 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Install backend deps
+        working-directory: backend
+        run: |
+          npm ci --no-audit --no-fund
+
+      - name: Run API smoke tests
+        working-directory: backend
+        run: node test_api.js
+
+      - name: Install Puppeteer for E2E
+        working-directory: backend
+        run: |
+          npm install --no-audit --no-fund puppeteer@21.11.0
+
+      - name: Run programmatic UI E2E
+        working-directory: backend
+        run: node test_ui_e2e.js
+
+      - name: Run headless Puppeteer UI test
+        working-directory: backend
+        run: node ui_e2e/puppeteer_login_test.js
+name: CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  backend-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js 18
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      - name: Install backend deps
+        working-directory: backend
+        run: npm ci
+      - name: Run backend tests
+        working-directory: backend
+        run: npm test

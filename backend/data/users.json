@@ -1,0 +1,38 @@
+[
+  {
+    "_id": "1783980660991",
+    "name": "System Admin",
+    "email": "admin@glbbank.com",
+    "password": "$2b$10$J8XVcKcZZcVUspa0J7n8P.jkJzkGBz9r9u6FpCKN3ihsxFcWwf0I2",
+    "role": "admin",
+    "mobile": "0000000000",
+    "studentId": "",
+    "facultyId": "",
+    "merchantId": "",
+    "createdAt": "2026-07-13T22:11:01.162Z"
+  },
+  {
+    "_id": "1783980661165",
+    "name": "Bank Manager",
+    "email": "manager@glbbank.com",
+    "password": "$2b$10$vZLFc3Tuq8BSIy4EZUruZOuAcKFDD2tt.OY.zmQx/rP7xdaGWJ3o.",
+    "role": "manager",
+    "mobile": "1111111111",
+    "studentId": "",
+    "facultyId": "",
+    "merchantId": "",
+    "createdAt": "2026-07-13T22:11:01.331Z"
+  },
+  {
+    "_id": "1783980662096",
+    "name": "Bank Employee",
+    "email": "employee@glbbank.com",
+    "password": "$2b$10$Q5SiyQVmfb7Cj0cgDosBx.1/qZzvtE6MGQqal4S4VIilEv5/Sqjfe",
+    "role": "employee",
+    "mobile": "2222222222",
+    "studentId": "",
+    "facultyId": "",
+    "merchantId": "",
+    "createdAt": "2026-07-13T22:11:02.227Z"
+  }
+]

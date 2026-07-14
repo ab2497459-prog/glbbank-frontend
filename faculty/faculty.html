@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GLBBANK - Faculty Workspace Panel</title>
+    <link rel="stylesheet" href="faculty.css">
+</head>
+<body>
+    <div class="workspace-container">
+        <!-- Sidebar Navigation (Navi Style Structure Layout) -->
+        <aside class="sidebar">
+            <div class="brand-header">
+                <h2>GLBBANK</h2>
+                <span>Faculty Workspace</span>
+            </div>
+            <nav class="navi-menu">
+                <button id="btn-profile" class="navi-menu-btn active" onclick="switchSection('profile-section')">My Profile</button>
+                <button id="btn-pay" class="navi-menu-btn" onclick="switchSection('pay-section')">Pay Anyone</button>
+                <button id="btn-set-upi" class="navi-menu-btn" onclick="switchSection('upi-section')">Set UPI PIN</button>
+                <button id="btn-check-bal" class="navi-menu-btn" onclick="switchSection('balance-section')">Check Balance</button>
+                <button id="btn-reset-pass" class="navi-menu-btn" onclick="switchSection('password-section')">Reset Login Password</button>
+                <button id="btn-history" class="navi-menu-btn" onclick="switchSection('history-section')">Transaction History</button>
+                <button class="navi-menu-btn logout-btn" onclick="terminateSession()">Secure Logout</button>
+            </nav>
+        </aside>
+
+        <!-- Main Content Area Frame Grid -->
+        <main class="content-frame">
+            
+            <!-- 1. PROFILE SECTION (SBI YONO STYLED) -->
+            <section id="profile-section" class="workspace-card active">
+                <div class="yono-header-banner">
+                    <div class="yono-avatar-container">
+                        <div class="yono-initials-badge" id="lblYonoInitials">FI</div>
+                        <img id="imgAvatarPlaceholder" src="" alt="Avatar" class="avatar-hidden">
+                    </div>
+                    <div class="yono-welcome-meta">
+                        <span>Welcome back,</span>
+                        <h2 id="profName">-</h2>
+                        <span class="yono-tag-badge" id="profFacultyId">-</span>
+                    </div>
+                </div>
+
+                <!-- Primary Account Pass Card Block Asset -->
+                <div class="yono-account-pass-card">
+                    <div class="card-chip-icon"></div>
+                    <div class="card-main-particulars">
+                        <label>PRIMARY ACCOUNT NUMBER</label>
+                        <h2 id="profAccountNo">---------</h2>
+                    </div>
+                    <div class="card-brand-watermark">GLBBANK Premium</div>
+                </div>
+
+                <!-- Secondary Supplementary Parameter Matrix Data Grids -->
+                <div class="yono-details-matrix">
+                    <div class="yono-matrix-cell">
+                        <span class="cell-caption">Mobile Contact No.</span>
+                        <strong id="profMobile">-</strong>
+                    </div>
+                    <div class="yono-matrix-cell">
+                        <span class="cell-caption">Email Address</span>
+                        <strong id="profEmail">-</strong>
+                    </div>
+                    <div class="yono-matrix-cell">
+                        <span class="cell-caption">Gender Profile</span>
+                        <strong id="profGender">-</strong>
+                    </div>
+                    <div class="yono-matrix-cell">
+                        <span class="cell-caption">Institutional Tier</span>
+                        <strong>Corporate Faculty Member</strong>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. PAY ANYONE SECTION -->
+            <section id="pay-section" class="workspace-card">
+                <h3>Instant Clearing Payment Terminal</h3>
+                <div class="form-group">
+                    <label>Target Account Number or Mobile No.</label>
+                    <div class="input-inline">
+                        <input type="text" id="txtReceiverInput" placeholder="Search Account or Mobile ID...">
+                        <button class="btn-primary" onclick="lookupReceiverProfile()">Fetch Details</button>
+                    </div>
+                </div>
+                <div id="divReceiverFeedback" class="feedback-card feedback-hidden">
+                    <p>Verified Recipient Target: <strong id="lblReceiverName">-</strong></p>
+                    <div class="form-group feedback-margin-top">
+                        <label>Allocation Settlement Amount (₹)</label>
+                        <input type="number" id="numTransferAmount" placeholder="0.00" min="1">
+                    </div>
+                    <div class="form-group">
+                        <label>Input 4-Digit Security UPI PIN</label>
+                        <input type="password" id="txtPayUpiPin" maxlength="4" placeholder="••••">
+                    </div>
+                    <button class="btn-success" onclick="initiatePaymentSequence()">Authorize Cash Settlement</button>
+                </div>
+            </section>
+
+            <!-- 3. SET UPI PIN SECTION -->
+            <section id="upi-section" class="workspace-card">
+                <h3>Security Vault UPI PIN Initialization</h3>
+                <div class="form-group">
+                    <label>Registered 12-Digit Aadhaar Card Number</label>
+                    <input type="password" id="txtUpiAadhar" maxlength="12" placeholder="•••• •••• ••••">
+                </div>
+                <div class="form-group">
+                    <label>Configure New 4-Digit Security UPI PIN</label>
+                    <input type="password" id="txtNewUpiPin" maxlength="4" placeholder="••••">
+                </div>
+                <button class="btn-primary" onclick="commitUpiPinConfig()">Commit to Vaults</button>
+            </section>
+
+            <!-- 4. CHECK BALANCE SECTION -->
+            <section id="balance-section" class="workspace-card">
+                <h3>Instant Core Assets Inquiry</h3>
+                <div class="form-group">
+                    <label>Input 4-Digit Security UPI PIN</label>
+                    <input type="password" id="txtInquiryUpiPin" maxlength="4" placeholder="••••">
+                </div>
+                <button class="btn-primary" onclick="executeBalanceCheck()">Fetch Assets</button>
+                <div id="divBalanceDisplay" class="balance-readout-card balance-hidden">
+                    <span>AVAILABLE CORE BALANCE</span>
+                    <h1 id="lblBalanceAmount">₹0.00</h1>
+                </div>
+            </section>
+
+            <!-- 5. RESET LOGIN PASSWORD SECTION -->
+            <section id="password-section" class="workspace-card">
+                <h3>System Access Credential Reset</h3>
+                <div class="form-group">
+                    <label>Registered 12-Digit Aadhaar Card Number</label>
+                    <input type="password" id="txtPassAadhar" maxlength="12" placeholder="•••• •••• ••••">
+                </div>
+                <div class="form-group">
+                    <label>Configure New Secure Alpha-Numeric Password</label>
+                    <input type="password" id="txtNewPassword" placeholder="Enter new custom account password...">
+                </div>
+                <button class="btn-primary" onclick="commitPasswordReset()">Update Credentials</button>
+            </section>
+
+            <!-- 6. TRANSACTION HISTORY SECTION -->
+            <section id="history-section" class="workspace-card">
+                <h3>Real-Time Account Statement Logs</h3>
+                <div class="table-responsive">
+                    <table class="history-table">
+                        <thead>
+                            <tr>
+                                <th>Timestamp</th>
+                                <th>Reference ID</th>
+                                <th>Operation / Transaction Partner</th>
+                                <th>Amount Affected</th>
+                                <th>Post Balance</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tblFacultyHistoryBody">
+                            <!-- Populated Dynamically via Script JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- UI Blocker Processing Modal -->
+    <div id="paytmProcessingOverlay" class="processing-modal">
+        <div class="spinner"></div>
+        <h4>Securing Workspace Connection Ledger...</h4>
+        <p>Please do not close this window or refresh the connection.</p>
+    </div>
+
+    <!-- FIXED SCRIPT INJECTION BINDING LINK -->
+    <script src="../shared/api.js"></script>
+    <script src="faculty.js"></script>
+</body>
+</html>

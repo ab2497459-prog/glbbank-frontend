@@ -1,0 +1,59 @@
+*** Begin Patch
+*** Add File: PREPARE_RELEASE.ps1
++ # Run from repository root
++ # Creates branch, stages all changes, commits and pushes to origin
++ param(
++     [string]$branch = "backend-integration-fix",
++     [string]$message = "Backend/frontend integration: mapping fixes, employee inline-edit, E2E tests"
++ )
++ if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
++     Write-Error "git is not installed or not on PATH. Install Git for Windows and re-run this script."
++     exit 1
++ }
++ Write-Output "Creating branch $branch (or switching to it)"
++ git checkout -b $branch 2>$null || git checkout $branch
++ Write-Output "Staging changes"
++ git add -A
++ Write-Output "Committing"
++ git commit -m $message
++ Write-Output "Pushing to origin/$branch"
++ git push -u origin $branch
++ Write-Output "Done. Run tests locally: node backend/test_api.js and node backend/test_ui_e2e.js"
+*** End Patch
+*** Begin Patch
+*** Add File: RELEASE_README.md
++ **Release Instructions**
++ - **Purpose**: Commit and push the integration fixes and E2E tests added to the repo.
++ - **Prerequisites**: Git installed and configured locally; you have push access to the repo's origin.
++
++ - **Commands** (run from project root):
++
++ ```powershell
++ # create branch, commit and push (script provided)
++ .\PREPARE_RELEASE.ps1 -branch "backend-integration-fix" -message "Backend/frontend integration: mapping fixes, employee inline-edit, E2E tests"
++ ```
++
++ - **Manual steps** (if you prefer manual git):
++
++ ```powershell
++ git checkout -b backend-integration-fix
++ git add -A
++ git commit -m "Backend/frontend integration: mapping fixes, employee inline-edit, E2E tests"
++ git push -u origin backend-integration-fix
++ ```
++
++ - **Verify**:
++
++ ```powershell
++ cd backend
++ node test_api.js
++ node test_ui_e2e.js
++ # optional headless UI test
++ node ui_e2e/puppeteer_login_test.js
++ ```
++
++ - **Notes**:
++ - `git` is not available in the current environment where I ran tests; you must run the commit/push steps locally.
++ - The backend uses Supabase; ensure `backend/.env` has `SUPABASE_URL` and `SUPABASE_KEY` set before running tests.
++
+*** End Patch

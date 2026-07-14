@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GLBBANK - GL Bajaj Group of Institutions</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Top Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo-area">
+                <span class="bank-brand">GLBBANK</span>
+                <span class="inst-brand">GL Bajaj Group of Institutions, Mathura</span>
+            </div>
+            <div class="nav-links">
+                <a href="#" class="active">Home</a>
+                <a href="#about">About Us</a>
+                <a href="#services">Services</a>
+                <a href="#contact">Contact Us</a>
+                <button class="btn-nav-login" id="openLoginBtn">Login</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Showcase Section -->
+    <header class="hero-section">
+        <div class="hero-content">
+            <h1>Welcome to Campus Digital Banking</h1>
+            <p>Experience secure, localized financial solutions custom-built for the students, faculty, and administration of GL Bajaj Group of Institutions.</p>
+            <button class="btn-hero-cta" id="heroLoginBtn">Access Secure Portal</button>
+        </div>
+    </header>
+
+    <!-- Institutional Sections -->
+    <main class="main-body-content">
+        <!-- About Section -->
+        <section id="about" class="info-section">
+            <h2>About GLBBANK</h2>
+            <hr class="sbi-divider">
+            <p>GLBBANK is an exclusive institutional banking simulation portal designed to streamline internal cash flows, campus merchant systems, vendor payments, and digital student deposits at the GL Bajaj Group of Institutions, Mathura campus. Built to reflect real-world enterprise architectures, the platform enforces secure role-based operation segments.</p>
+        </section>
+
+        <!-- Services Section -->
+        <section id="services" class="info-section bg-alt">
+            <h2>Our Digital Services</h2>
+            <hr class="sbi-divider">
+            <div class="services-grid">
+                <div class="service-card">
+                    <h3>Academic Wallets</h3>
+                    <p>Enables zero-touch student identity verification links, account creations, and real-time ledger management operations.</p>
+                </div>
+                <div class="service-card">
+                    <h3>Merchant Terminals</h3>
+                    <p>Integrates campus canteen systems and local shopkeepers straight to the central treasury logs smoothly.</p>
+                </div>
+                <div class="service-card">
+                    <h3>Executive Controls</h3>
+                    <p>Provides complete registry dashboards, multi-role lookups, full inline record modification tools, and instant account block options.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="info-section">
+            <h2>Contact Administration</h2>
+            <hr class="sbi-divider">
+            <p>For credentials, account verification inquiries, or recovery questions, please reach out to the institutional desk:</p>
+            <p><strong>📍 Location:</strong> GL Bajaj Group of Institutions, NH-2, Mathura-Delhi Road, Uttar Pradesh</p>
+            <p><strong>📧 Support Email:</strong> bank.support@glbajaj.org</p>
+        </section>
+    </main>
+
+    <!-- Footer Area -->
+    <footer class="portal-footer">
+        <p>© 2026 GLBBANK Terminal Services. Always verify the secure institutional connection protocol before entering access keys.</p>
+    </footer>
+
+    <!-- SECURE LOGIN BOX MODAL OVERLAY -->
+    <div class="modal-overlay" id="loginModal">
+        <div class="login-wrapper">
+            <button class="close-modal-btn" id="closeLoginBtn">&times;</button>
+            <div class="login-header">
+                <div class="bank-badge-logo">GLB</div>
+                <h3>Secure Internet Banking Login</h3>
+            </div>
+
+            <form id="portalLoginForm">
+                <div class="form-group">
+                    <label for="loginRole">Select User Role</label>
+                    <!-- FIXED ONCHANGE LISTENER ATTACHED HERE -->
+                    <select id="loginRole" onchange="adaptLoginPlaceholder(this.value)" required>
+                        <option value="" disabled selected>-- Select your portal option --</option>
+                        <option value="manager">Bank Manager</option>
+                        <option value="employee">Bank Employee</option>
+                        <option value="admin">Administrator</option>
+                        <option value="student">Student Portal</option>
+                        <option value="faculty">Faculty Portal</option>
+                        <option value="merchant">Merchant Portal</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <!-- FIXED LABELS TARGETED VIA JAVASCRIPT ID -->
+                    <label id="lblUserCredential" for="loginEmail">User ID / Email Address</label>
+                    <input type="text" id="loginEmail" placeholder="Enter credentials" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" placeholder="••••••••" required>
+                </div>
+
+                <button type="submit" class="btn-login-submit">Login Securely</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="../shared/api.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

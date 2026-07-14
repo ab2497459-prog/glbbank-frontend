@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GLBBANK - Employee Operation Suite</title>
+    <link rel="stylesheet" href="../landing-page/style.css">
+    <link rel="stylesheet" href="employee.css">
+
+</head>
+<body>
+
+    <!-- Upper Control Ribbon Banner -->
+    <div class="header-bar">
+        <h2>GL BAJAJ GROUP OF INSTITUTIONS - Bank Employee Hub</h2>
+        <div class="operator-badge">Operator Status: <span>Online</span></div>
+    </div>
+
+    <div class="dashboard-container">
+        <!-- Tree Sidebar Structure -->
+        <div class="sidebar">
+            <div class="tree-title">Account Creation</div>
+            <button class="tree-node active" id="node-open" onclick="switchPanel('open-account-panel')">📁 Open New Account</button>
+            
+            <div class="tree-title section-gap">Transaction Desk</div>
+            <button class="tree-node" id="node-tx" onclick="switchPanel('tx-terminal-panel')">💰 Withdraw / Deposit</button>
+
+            <div class="tree-title section-gap-large">Customer Registries</div>
+            <button class="tree-node" id="node-student" onclick="switchPanel('student-reg-panel')">└ 🎓 Student Registry</button>
+            <button class="tree-node" id="node-faculty" onclick="switchPanel('faculty-reg-panel')">└ 👔 Faculty Registry</button>
+            <button class="tree-node" id="node-merchant" onclick="switchPanel('merchant-reg-panel')">└ 🛒 Merchant Registry</button>
+
+            <button class="tree-node logout-button" onclick="triggerLogout()">🚪 Secure Logout</button>
+        </div>
+
+        <!-- Main Workspace Viewport -->
+        <div class="main-content">
+            
+            <!-- Account Creation Hub -->
+            <div id="open-account-panel" class="content-section active">
+                <h3>Account Opening Workflow</h3>
+                <div class="form-select-wrapper">
+                    <label for="accountTypeSelect">Select Target Segment Profile:</label>
+                    <select id="accountTypeSelect" onchange="toggleFormFields(this.value)">
+                        <option value="student">Student Account Profile</option>
+                        <option value="faculty">Faculty Account Profile</option>
+                        <option value="merchant">Merchant Account Profile</option>
+                    </select>
+                </div>
+
+                <form id="accountOpeningForm">
+                    <div class="form-field"><label>Full Account Name</label><input type="text" id="accName" placeholder="Full Account Name" required></div>
+                    <div class="form-field" id="divFatherName"><label>Father's Name</label><input type="text" id="accFatherName" placeholder="Father's Name" required></div>
+                    <div class="form-field"><label>10-Digit Mobile Number</label><input type="tel" id="accMobile" placeholder="10-Digit Mobile Number" pattern="[0-9]{10}" required></div>
+                    <div class="form-field"><label>Email Address</label><input type="email" id="accEmail" placeholder="Email Address" required></div>
+                    <div class="form-field" id="divGender">
+                        <label for="accGender">Gender</label>
+                        <select id="accGender" title="Gender" aria-label="Gender">
+                            <option value="Male">Male</option><option value="Female">Female</option><option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-field"><label>Aadhaar Card (12 Digits)</label><input type="text" id="accAadhar" placeholder="Aadhaar Card" pattern="\d{12}" required></div>
+                    <div class="form-field"><label>PAN Card</label><input type="text" id="accPan" placeholder="PAN Card" pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}" required></div>
+                    <div class="form-field"><label>Initial Deposit (₹)</label><input type="number" id="accDeposit" placeholder="Min 0" min="0" value="0" step="0.01" required></div>
+                    <div class="form-field"><label>Set Customer Password</label><input type="password" id="accPassword" placeholder="Set Customer Password" required></div>
+
+                    <!-- Profile Segment Fields -->
+                    <div class="form-field" id="divStudentId"><label>Student ID Profile</label><input type="text" id="fldStudentId" placeholder="Student ID"></div>
+                    <div class="form-field" id="divRollNo"><label>University Roll Number</label><input type="text" id="fldRollNo" placeholder="Roll Number"></div>
+                    <div class="form-field" id="divCourse"><label for="fldCourse">Course</label><select id="fldCourse" title="Course"><option value="B.Tech">B.Tech</option><option value="MBA">MBA</option></select></div>
+                    <div class="form-field" id="divSection"><label>Section</label><input type="text" id="fldSection" placeholder="Section"></div>
+                    <div class="form-field hidden-field" id="divFacultyId"><label>Faculty ID</label><input type="text" id="fldFacultyId" placeholder="Faculty ID"></div>
+                    <div class="form-field hidden-field" id="divShopType"><label for="fldShopType">Shop Type</label><select id="fldShopType" title="Shop Type"><option value="Canteen">Campus Canteen</option><option value="Shopkeeper">Utility Shopkeeper</option></select></div>
+
+                    <button type="submit" class="btn-submit-account">Validate & Finalize Account Creation</button>
+                </form>
+            </div>
+            <!-- Withdraw / Deposit Terminal Panel -->
+<div id="tx-terminal-panel" class="content-section">
+    <h3>Cash Withdrawal / Deposit Operations Desk</h3>
+    
+    <div class="search-container tx-search-container">
+        <input type="text" id="txLookupKey" placeholder="Enter 11-Digit Account No. or Mobile No...">
+        <button class="btn-search" onclick="fetchAccountHolder()">🔍 Fetch Account</button>
+    </div>
+
+    <!-- TRANSFORMED: Premium Account Holder Info Card -->
+    <div id="txHolderDetailsCard" class="holder-profile-card hidden-field">
+        <div class="card-badge-header">
+            <h4>Confirmed Account Holder Information</h4>
+            <span id="lblHolderStatus" class="status-pill">Active</span>
+        </div>
+        
+        <div class="profile-info-grid">
+            <div class="info-item">
+                <span class="info-label">Account Holder Name</span>
+                <span id="lblHolderName" class="info-value">-</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Account Number</span>
+                <span id="lblHolderAccountNo" class="info-value account-highlight">-</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Account Class Segment</span>
+                <span id="lblHolderSegment" class="info-value">-</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Mobile Association</span>
+                <span id="lblHolderMobile" class="info-value">-</span>
+            </div>
+        </div>
+
+        <div class="balance-metric-display">
+            <span class="balance-label">Available Ledger Balance</span>
+            <span class="balance-amount">₹<span id="lblHolderBalance">0.00</span></span>
+        </div>
+    </div>
+
+    <!-- Transaction Posting Form Grid Layout -->
+    <form id="cashTransactionForm" class="transaction-grid-form hidden-field">
+        <div class="form-field">
+            <label for="txActionType">Operation Type</label>
+            <select id="txActionType" required>
+                <option value="Deposit">Deposit Cash (+)</option>
+                <option value="Withdraw">Withdraw Cash (-)</option>
+            </select>
+        </div>
+        <div class="form-field">
+            <label for="txAmount">Transaction Amount (₹)</label>
+            <input type="number" id="txAmount" placeholder="Enter cash amount" min="1" step="0.01" required>
+        </div>
+        <button type="submit" class="btn-submit-account btn-post-ledger">Post Transaction Ledger Entry</button>
+    </form>
+
+    <!-- Dynamic Account Ledger History Timeline -->
+    <div id="txHistoryContainer" class="tx-history-container">
+        <h3 class="section-sub-title">Real-Time Account Statement Logs</h3>
+        <div class="table-scroll-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Timestamp</th>
+                        <th>Transaction Ref ID</th>
+                        <th>Operation</th>
+                        <th>Amount Affected</th>
+                        <th>Post-Operation Balance</th>
+                    </tr>
+                </thead>
+                <tbody id="txHistoryTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+            <!-- Student Registry -->
+            <div id="student-reg-panel" class="content-section">
+                <h3>Real-Time Student Account Registry</h3>
+                <div class="search-container"><input type="text" id="searchStudent" placeholder="Search..."><button class="btn-search" onclick="renderRegistry('student')">Search</button></div>
+                <div class="table-scroll-wrapper">
+                    <table>
+                        <thead><tr><th>Account No.</th><th>Name</th><th>Father's Name</th><th>Mobile</th><th>Email</th><th>Student ID</th><th>Roll No</th><th>Course</th><th>Section</th><th>Aadhaar</th><th>PAN</th><th>Status</th><th>Actions</th></tr></thead>
+                        <tbody id="studentTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Faculty Registry -->
+            <div id="faculty-reg-panel" class="content-section">
+                <h3>Real-Time Faculty Account Registry</h3>
+                <div class="search-container"><input type="text" id="searchFaculty" placeholder="Search..."><button class="btn-search" onclick="renderRegistry('faculty')">Search</button></div>
+                <div class="table-scroll-wrapper">
+                    <table>
+                        <thead><tr><th>Account No.</th><th>Name</th><th>Faculty ID</th><th>Mobile</th><th>Email</th><th>Gender</th><th>Aadhaar</th><th>PAN</th><th>Status</th><th>Actions</th></tr></thead>
+                        <tbody id="facultyTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Merchant Registry -->
+            <div id="merchant-reg-panel" class="content-section">
+                <h3>Real-Time Merchant Account Registry</h3>
+                <div class="search-container"><input type="text" id="searchMerchant" placeholder="Search..."><button class="btn-search" onclick="renderRegistry('merchant')">Search</button></div>
+                <div class="table-scroll-wrapper">
+                    <table>
+                        <thead><tr><th>Account No.</th><th>Name</th><th>Father's Name</th><th>Mobile</th><th>Email</th><th>Shop Type</th><th>Aadhaar</th><th>PAN</th><th>Status</th><th>Actions</th></tr></thead>
+                        <tbody id="merchantTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="../shared/api.js"></script>
+    <script src="employee.js"></script>
+</body>
+</html>

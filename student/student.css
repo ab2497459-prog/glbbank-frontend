@@ -1,0 +1,380 @@
+/* ==========================================================================
+   NAVI Design Directives - Clean Typography & Mint Accents
+   ========================================================================== */
+
+:root {
+    --navi-bg: #f5f7fa;
+    --navi-white: #ffffff;
+    --navi-dark: #001f3f;
+    --navi-mint: #00d2c4;
+    --navi-text-main: #2d3748;
+    --navi-text-muted: #718096;
+    --navi-border: #e2e8f0;
+    --danger-red: #ff4d4f;
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--navi-bg);
+    color: var(--navi-text-main);
+    overflow-x: hidden;
+}
+
+/* Header Banner */
+.navi-header {
+    background-color: var(--navi-dark);
+    color: var(--navi-white);
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.brand-block {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.brand-logo {
+    background: var(--navi-mint);
+    color: var(--navi-dark);
+    font-weight: 900;
+    font-size: 20px;
+    padding: 4px 12px;
+    border-radius: 4px;
+}
+
+.brand-block h2 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.brand-block h2 span {
+    color: var(--navi-mint);
+    font-size: 13px;
+    font-weight: 400;
+    margin-left: 5px;
+}
+
+.session-tracker {
+    font-size: 13px;
+    color: #a0aec0;
+}
+
+.badge-live {
+    background-color: rgba(0, 210, 196, 0.2);
+    color: var(--navi-mint);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+/* FIXED GRID: Side-by-Side Flexbox Execution Framework */
+.navi-viewport-container {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    min-height: calc(100vh - 62px);
+    width: 100%;
+}
+
+.navi-sidebar {
+    width: 260px;
+    min-width: 260px;
+    background-color: var(--navi-dark);
+    padding: 30px 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-self: stroke;
+    min-height: calc(100vh - 62px);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.navi-menu-btn {
+    background: transparent;
+    border: none;
+    color: #a0aec0;
+    text-align: left;
+    padding: 14px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+    width: 100%;
+}
+
+.navi-menu-btn:hover, .navi-menu-btn.active {
+    background-color: rgba(255, 255, 255, 0.08);
+    color: var(--navi-mint);
+}
+
+.navi-logout-btn {
+    margin-top: auto;
+    background: transparent;
+    border: 1px solid var(--danger-red);
+    color: var(--danger-red);
+    padding: 12px;
+    text-align: center;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.2s;
+}
+
+.navi-logout-btn:hover {
+    background: var(--danger-red);
+    color: white;
+}
+
+/* Dynamic Panel Workspace Layout */
+.navi-workspace {
+    flex: 1;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: calc(100% - 260px);
+}
+
+.workspace-card {
+    display: none;
+    background: var(--navi-white);
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+    border: 1px solid var(--navi-border);
+    max-width: 900px;
+    width: 100%;
+}
+
+.workspace-card.active {
+    display: block;
+}
+
+.workspace-card h3 {
+    margin-top: 0;
+    margin-bottom: 25px;
+    font-size: 20px;
+    color: var(--navi-dark);
+    border-bottom: 2px solid var(--navi-bg);
+    padding-bottom: 12px;
+}
+
+/* Profile Elements */
+.profile-avatar-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 30px;
+    gap: 12px;
+}
+
+.avatar-circle {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    background: var(--navi-bg);
+    border: 3px solid var(--navi-mint);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.avatar-circle img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.btn-upload-label {
+    background: var(--navi-bg);
+    color: var(--navi-dark);
+    padding: 6px 14px;
+    font-size: 12px;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    border: 1px solid var(--navi-border);
+}
+
+#fileAvatarUpload { display: none; }
+
+.static-profile-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    width: 100%;
+}
+
+.static-field label {
+    display: block;
+    font-size: 11px;
+    color: var(--navi-text-muted);
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.static-field p {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 600;
+    background: var(--navi-bg);
+    padding: 12px;
+    border-radius: 6px;
+    color: #4a5568;
+    border-left: 3px solid #cbd5e0;
+}
+
+/* Form Controls */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.form-group label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--navi-text-main);
+}
+
+.form-group input {
+    padding: 14px;
+    font-size: 14px;
+    border: 1px solid var(--navi-border);
+    border-radius: 6px;
+    background: var(--navi-bg);
+    width: 100%;
+    outline: none;
+}
+
+.input-inline-group {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+}
+
+.input-inline-group input { flex: 1; }
+
+.btn-action-primary {
+    background: var(--navi-dark);
+    color: white;
+    border: none;
+    padding: 0 20px;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.feedback-card {
+    background: rgba(0, 210, 196, 0.08);
+    border: 1px solid var(--navi-mint);
+    padding: 12px;
+    border-radius: 6px;
+    margin-top: 8px;
+    font-size: 14px;
+}
+
+.btn-navi-submit {
+    background: var(--navi-mint);
+    color: var(--navi-dark);
+    border: none;
+    width: 100%;
+    padding: 14px;
+    font-size: 15px;
+    font-weight: 700;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 15px;
+    box-shadow: 0 4px 12px rgba(0, 210, 196, 0.2);
+}
+
+.balance-focus-block {
+    margin-top: 25px;
+    background: var(--navi-dark);
+    color: white;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.balance-focus-block .label { color: var(--navi-mint); font-size: 12px; font-weight: bold; text-transform: uppercase; }
+.balance-focus-block h2 { margin: 10px 0 0 0; font-size: 32px; font-weight: 800; }
+
+/* Paytm Loader Modal Overlay Theme - DEFAULTS TO HIDDEN STATE */
+.paytm-modal-shield {
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    background: rgba(255, 255, 255, 0.95);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.paytm-modal-shield.active {
+    display: flex;
+}
+
+.paytm-loader-box {
+    text-align: center;
+    max-width: 350px;
+    width: 100%;
+}
+
+.spinner-circle {
+    width: 60px;
+    height: 60px;
+    border: 5px solid #e2e8f0;
+    border-top: 5px solid #00baf2;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 20px auto;
+}
+
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+.paytm-loader-box h4 { margin: 0 0 8px 0; color: #002e6e; font-size: 18px; font-weight: 700; }
+.paytm-loader-box p { margin: 0; color: var(--navi-text-muted); font-size: 13px; }
+.footer-lock { margin-top: 30px; font-size: 11px; color: #a0aec0; text-transform: uppercase; font-weight: bold; }
+
+/* Security System Termination Lockdown Shield */
+.security-lockout-shield {
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    background: #000000;
+    color: white;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 100000;
+}
+
+.lockout-alert-panel {
+    text-align: center;
+    max-width: 500px;
+    padding: 40px;
+    width: 100%;
+}
+
+.alert-icon { font-size: 64px; margin-bottom: 20px; }
+.lockout-alert-panel h2 { color: var(--danger-red); margin: 0 0 15px 0; font-weight: 800; font-size: 24px; }
+.lockout-alert-panel p { color: #a0aec0; line-height: 1.6; font-size: 15px; }
+.lockout-alert-panel strong { color: white; }

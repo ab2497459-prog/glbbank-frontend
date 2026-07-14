@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GLBBANK - Student Digital Wallet</title>
+    <link rel="stylesheet" href="student.css">
+</head>
+<body>
+
+    <!-- NAVI Inspired Structural Ribbon Header -->
+    <div class="navi-header">
+        <div class="brand-block">
+            <span class="brand-logo">N</span>
+            <h2>GLBBANK <span>Student Hub</span></h2>
+        </div>
+        <div class="session-tracker">Secure Session Status: <span class="badge-live">Active</span></div>
+    </div>
+
+    <div class="navi-viewport-container">
+        <!-- Sidebar Segment Controllers -->
+        <div class="navi-sidebar">
+            <button class="navi-menu-btn active" id="btn-profile" onclick="switchSection('profile-section')">👤 My Profile</button>
+            <button class="navi-menu-btn" id="btn-pay" onclick="switchSection('pay-section')">⚡ Pay Anyone</button>
+            <button class="navi-menu-btn" id="btn-set-upi" onclick="switchSection('upi-section')">🔑 Set UPI PIN</button>
+            <button class="navi-menu-btn" id="btn-check-bal" onclick="switchSection('balance-section')">🔍 Check Balance</button>
+            <button class="navi-menu-btn" id="btn-reset-pass" onclick="switchSection('password-section')">🔒 Reset Password</button>
+            <button class="navi-menu-btn" id="btn-history" onclick="switchSection('history-section')">📊 Transaction History</button>
+            
+            <button class="navi-logout-btn" onclick="terminateSession()">🚪 Disconnect Wallet</button>
+        </div>
+
+        <!-- Main Dynamic Viewport Workspace -->
+        <div class="navi-workspace">
+            
+            <!-- SECTION 1: Uneditable Profile Module -->
+            <div id="profile-section" class="workspace-card active">
+                <h3>My Profile Dashboard</h3>
+                <div class="profile-avatar-wrapper">
+                    <div class="avatar-circle">
+                        <img id="imgAvatarPlaceholder" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23b2bec3'><path d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/></svg>" alt="Avatar">
+                    </div>
+                    <label for="fileAvatarUpload" class="btn-upload-label">Set Profile Picture</label>
+                    <input type="file" id="fileAvatarUpload" accept="image/*" onchange="processAvatarUpdate(event)">
+                </div>
+
+                <div class="static-profile-grid">
+                    <div class="static-field"><label>Account Number</label><p id="profAccountNo">-</p></div>
+                    <div class="static-field"><label>Full Name</label><p id="profName">-</p></div>
+                    <div class="static-field"><label>University Roll Number</label><p id="profRollNo">-</p></div>
+                    <div class="static-field"><label>Registered Mobile</label><p id="profMobile">-</p></div>
+                    <div class="static-field"><label>Email Address</label><p id="profEmail">-</p></div>
+                    <div class="static-field"><label>Course / Specialization</label><p id="profCourse">-</p></div>
+                </div>
+            </div>
+
+            <!-- SECTION 2: Instant Pay Engine -->
+            <div id="pay-section" class="workspace-card">
+                <h3>Pay Anyone Terminal</h3>
+                <div class="form-group">
+                    <label>Receiver Identification</label>
+                    <div class="input-inline-group">
+                        <input type="text" id="txtReceiverInput" placeholder="Enter 11-Digit Account No. or Mobile No.">
+                        <button type="button" class="btn-action-primary" onclick="lookupReceiverProfile()">Verify User</button>
+                    </div>
+                </div>
+
+                <div id="divReceiverFeedback" class="feedback-card hidden">
+                    <span class="label">Verified Beneficiary:</span>
+                    <strong id="lblReceiverName">-</strong>
+                </div>
+
+                <div class="form-group transfer-amount-group">
+                    <label>Transfer Amount (₹)</label>
+                    <input type="number" id="numTransferAmount" placeholder="Enter amount to transfer" min="1" step="0.01">
+                </div>
+
+                <button type="button" class="btn-navi-submit" onclick="initiatePaymentSequence()">Execute Instant Transfer</button>
+            </div>
+
+            <!-- SECTION 3: Set UPI PIN -->
+            <div id="upi-section" class="workspace-card">
+                <h3>Set System UPI Authentication PIN</h3>
+                <div class="form-group">
+                    <label>Confirm 12-Digit Aadhaar Card</label>
+                    <input type="text" id="txtUpiAadhar" placeholder="Enter registered Aadhaar digits" maxlength="12">
+                </div>
+                <div class="form-group">
+                    <label>Establish New 4-Digit UPI PIN</label>
+                    <input type="password" id="txtNewUpiPin" placeholder="...." maxlength="4" pattern="\d{4}">
+                </div>
+                <button type="button" class="btn-navi-submit" onclick="commitUpiPinConfig()">Register Safe UPI Authentication PIN</button>
+            </div>
+
+            <!-- SECTION 4: Check Balance -->
+            <div id="balance-section" class="workspace-card">
+                <h3>Instant Ledger Balance Inquiry</h3>
+                <div class="form-group balance-inquiry-group">
+                    <label>Enter 4-Digit Security UPI PIN</label>
+                    <input type="password" id="txtInquiryUpiPin" placeholder="...." maxlength="4" class="upi-pin-input">
+                </div>
+                <button type="button" class="btn-navi-submit" onclick="executeBalanceCheck()">Fetch Balance Data</button>
+
+                <div id="divBalanceDisplay" class="balance-focus-block balance-hidden">
+                    <span class="label">Available Core Ledger Balance</span>
+                    <h2 id="lblBalanceAmount">₹0.00</h2>
+                </div>
+            </div>
+
+            <!-- SECTION 5: Reset Login Password -->
+            <div id="password-section" class="workspace-card">
+                <h3>Reset Portal Access Password</h3>
+                <div class="form-group">
+                    <label>Confirm 12-Digit Aadhaar Card</label>
+                    <input type="text" id="txtPassAadhar" placeholder="Enter registered Aadhaar digits" maxlength="12">
+                </div>
+                <div class="form-group">
+                    <label>Configure New Account Password</label>
+                    <input type="password" id="txtNewPassword" placeholder="Enter secure new password">
+                </div>
+                <button type="button" class="btn-navi-submit" onclick="commitPasswordReset()">Authorize Password Modification</button>
+            </div>
+
+            <!-- SECTION 6: Unified Transaction History Log Panel -->
+            <div id="history-section" class="workspace-card">
+                <h3>Real-Time Account Statement Logs</h3>
+                <div class="history-table-wrapper">
+                    <table class="history-table">
+                        <thead>
+                            <tr class="history-table-header">
+                                <th>Timestamp</th>
+                                <th>Reference ID</th>
+                                <th>Operation / Transaction Partner</th>
+                                <th>Amount Affected</th>
+                                <th>Post Balance</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tblStudentHistoryBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- PROCESSING SHIELD OVERLAY: Paytm Style Loader -->
+    <div id="paytmProcessingOverlay" class="paytm-modal-shield">
+        <div class="paytm-loader-box">
+            <div class="spinner-circle"></div>
+            <h4>Processing Secure Money Transfer</h4>
+            <p>Please do not close this window or hit back...</p>
+            <div class="footer-lock">🔒 Powered by GLBBANK Institutional Switch Engine</div>
+        </div>
+    </div>
+
+    <!-- SECURITY INTERRUPT OVERLAY: 3x Pin Lockout Shield -->
+    <div id="securityLockoutOverlay" class="security-lockout-shield">
+        <div class="lockout-alert-panel">
+            <div class="alert-icon">⚠️</div>
+            <h2>TERMINAL TERMINATION BLOCK</h2>
+            <p>This profile portal access matrix has been <strong>IMMEDIATELY BLOCKED</strong> due to 3 consecutive invalid authentication PIN entries.</p>
+            <p class="sub text">Contact the operator desk at GL Bajaj Group of Institutions to verify your identity parameters.</p>
+        </div>
+    </div>
+
+    <script src="../shared/api.js"></script>
+    <script src="student.js"></script>
+</body>
+</html>
