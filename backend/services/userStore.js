@@ -125,18 +125,18 @@ if (usingSqlite) {
     if (!identifier) return null;
     const supabase = getSupabase();
     const normalized = normalize(identifier);
-    const orQuery = `email.ilike.${normalized},mobile.ilike.${normalized},studentid.ilike.${normalized},facultyid.ilike.${normalized},merchantid.ilike.${normalized},_id.eq.${normalized}`;
+    const orQuery = `email.eq.${normalized},mobile.eq.${normalized},studentid.eq.${normalized},facultyid.eq.${normalized},merchantid.eq.${normalized},_id.eq.${normalized}`;
     const { data, error } = await supabase
       .from('users')
       .select('*')
       .or(orQuery)
-      .maybeSingle();
+      .limit(1); // avoid errors when multiple users share the same mobile or identifier
 
     if (error) {
       throw error;
     }
-    if (!data) return null;
-    return mapUser(data);
+    if (!data || data.length === 0) return null;
+    return mapUser(data[0]);
   }
 
   async function findUserById(id) {
