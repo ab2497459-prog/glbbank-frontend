@@ -65,4 +65,7 @@ If you want, I can:
 - Commit changes into a branch and create a patch/PR.
 - Add Playwright UI tests that exercise the main login and manager flows.
 
+
+CI trigger: pushed a tiny README update to start GitHub Actions (2026-07-14)
+
 ---
