@@ -5,7 +5,10 @@ const path = require('path');
   const root = path.resolve(__dirname, '..', '..');
   const fileUrl = 'file://' + path.join(root, 'landing-page', 'index.html');
   console.log('Opening', fileUrl);
-  const browser = await puppeteer.launch({ headless: true });
+  const browser = await puppeteer.launch({
+    headless: true,
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+  });
   const page = await browser.newPage();
   page.on('dialog', async dialog => { console.log('Dialog:', dialog.message()); await dialog.dismiss(); });
   try {
