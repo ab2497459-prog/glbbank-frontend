@@ -6,8 +6,9 @@ const ADMIN_PASSWORD = 'Admintilak12@';
 const ADMIN_NAME = 'Tilak Raj Bhargava';
 
 async function seedAdmin() {
+  const USE_SQLITE = String(process.env.USE_SQLITE || '').toLowerCase() === 'true';
   let supabase = global.supabase;
-  if (!supabase) {
+  if (!supabase && !USE_SQLITE) {
     const { createClient } = require('@supabase/supabase-js');
     const SUPABASE_URL = process.env.SUPABASE_URL;
     const SUPABASE_KEY = process.env.SUPABASE_KEY;
@@ -16,12 +17,13 @@ async function seedAdmin() {
     global.supabase = supabase;
   }
 
-  // Remove all users except the desired admin email
-  try {
-    await supabase.from('users').delete().not('email', 'eq', ADMIN_EMAIL);
-  } catch (err) {
-    // ignore delete errors here, will surface on seeding below
-    console.warn('Could not delete other users:', err.message || err);
+  // If using Supabase, try to remove other users; if using SQLite skip that step
+  if (supabase) {
+    try {
+      await supabase.from('users').delete().not('email', 'eq', ADMIN_EMAIL);
+    } catch (err) {
+      console.warn('Could not delete other users:', err.message || err);
+    }
   }
 
   // Ensure admin exists (create if missing)

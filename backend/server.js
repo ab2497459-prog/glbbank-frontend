@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
@@ -9,17 +10,24 @@ require('dotenv').config();
 
 const app = express();
 
-// Initialize Supabase
+// Initialize Supabase (or allow SQLite fallback)
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_KEY = process.env.SUPABASE_KEY;
+const USE_SQLITE = String(process.env.USE_SQLITE || '').toLowerCase() === 'true';
 
+let supabase = null;
 if (!SUPABASE_URL || !SUPABASE_KEY) {
-  console.error('Missing SUPABASE_URL or SUPABASE_KEY environment variables');
-  process.exit(1);
+  if (USE_SQLITE) {
+    console.warn('SUPABASE_URL/KEY not provided — running with SQLite fallback (USE_SQLITE=true)');
+    global.supabase = null;
+  } else {
+    console.error('Missing SUPABASE_URL or SUPABASE_KEY environment variables');
+    process.exit(1);
+  }
+} else {
+  supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+  global.supabase = supabase; // Make supabase available globally
 }
-
-const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
-global.supabase = supabase; // Make supabase available globally
 
 // Security headers
 app.use(helmet());
@@ -55,10 +63,18 @@ app.use('/api/accounts', require('./routes/accounts'));
 app.use('/api/transactions', require('./routes/transactions'));
 app.use('/api/profile', require('./routes/profile'));
 
+// Serve frontend assets and shared client code for production deployment
+app.use('/shared', express.static(path.join(__dirname, '..', 'shared')));
+app.use(express.static(path.join(__dirname, '..', 'landing-page')));
+
 // basic centralized error handler
 app.use((err, req, res, next) => {
   logger.error(err && err.stack ? err.stack : String(err));
   res.status(500).json({ message: 'Internal server error' });
+});
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'landing-page', 'index.html'));
 });
 
 const { seedAdmin } = require('./seedAdmin');
