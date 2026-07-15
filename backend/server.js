@@ -45,14 +45,7 @@ app.use(express.json());
 // HTTP request logging via morgan -> winston
 app.use(morgan('combined', { stream: { write: msg => logger.info(msg.trim()) } }));
 
-app.get('/', (req, res) => {
-  res.json({
-    message: 'GLB Bank backend is running',
-    version: '1.0.0',
-    endpoints: ['/api/auth/register', '/api/auth/login', '/api/accounts', '/api/transactions']
-  });
-});
-
+// Health check endpoint (keep this for monitoring)
 app.get('/health', (req, res) => {
   res.json({ status: 'ok' });
 });
