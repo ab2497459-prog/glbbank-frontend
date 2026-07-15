@@ -1,6 +1,9 @@
 // Shared API helpers for frontend — backend-only mode
 (function(window){
-  const API_BASE_URL = 'http://127.0.0.1:5000/api';
+  const deployedApiUrl = 'https://glbbank-frontend.onrender.com/api';
+  const origin = window.location.origin || '';
+  const hasValidOrigin = origin.startsWith('http://') || origin.startsWith('https://');
+  const API_BASE_URL = hasValidOrigin ? `${origin}/api` : deployedApiUrl;
 
   function getAuthHeaders() {
     const token = localStorage.getItem('glbbank_authToken');
