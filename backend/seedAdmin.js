@@ -1,9 +1,9 @@
 require('dotenv').config();
-const { seedDefaultAccounts, findUserByEmail, createUser } = require('./services/userStore');
+const { seedDefaultAccounts, findUserByEmail, createUser, updateUser } = require('./services/userStore');
 
-const ADMIN_EMAIL = 'tilakrajbhargava4@gmail.com';
-const ADMIN_PASSWORD = 'Admintilak12@';
-const ADMIN_NAME = 'Tilak Raj Bhargava';
+const ADMIN_EMAIL = 'admin@glbbank.com';
+const ADMIN_PASSWORD = 'admin123';
+const ADMIN_NAME = 'System Admin';
 
 async function seedAdmin() {
   const USE_SQLITE = String(process.env.USE_SQLITE || '').toLowerCase() === 'true';
@@ -26,10 +26,20 @@ async function seedAdmin() {
     }
   }
 
-  // Ensure admin exists (create if missing)
+  // Ensure admin exists (create if missing) and reset password when present
   const existing = await findUserByEmail(ADMIN_EMAIL);
   if (existing) {
-    return existing;
+    try {
+      return await updateUser(existing._id, {
+        name: ADMIN_NAME,
+        password: ADMIN_PASSWORD,
+        role: 'admin',
+        mobile: '0000000000'
+      });
+    } catch (err) {
+      console.warn('Failed to reset admin credentials:', err.message || err);
+      return existing;
+    }
   }
 
   const admin = await createUser({ name: ADMIN_NAME, email: ADMIN_EMAIL, password: ADMIN_PASSWORD, role: 'admin', mobile: '0000000000' });
