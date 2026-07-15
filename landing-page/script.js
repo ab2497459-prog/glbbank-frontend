@@ -7,7 +7,8 @@ async function loginWithBackend(identifier, password) {
         return res.data;
     } catch (err) {
         if (err instanceof TypeError) {
-            throw new Error('Unable to reach backend. Is the backend server running at http://127.0.0.1:5000 and accessible?');
+            const apiUrl = window.GLBBANK_API?.API_BASE_URL || `${window.location.origin}/api`;
+            throw new Error(`Unable to reach backend. Is the server running at ${apiUrl}?`);
         }
         throw err;
     }
